@@ -15,9 +15,14 @@ protocol WeatherLocationViewType: AnyObject {
 
 class WeatherLocationViewController: UIViewController {
 
-    @IBOutlet private weak var mapView: MKMapView!
     @IBOutlet private weak var tableView: UITableView!
-
+    
+    private lazy var mapHeaderView: MapHeaderView = {
+        let width = tableView.frame.size.width
+        let height = view.frame.size.height * 0.3
+        return MapHeaderView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+    }()
+    
     var presenter: WeatherLocationPresenterType?
 
     override func viewDidLoad() {
@@ -36,6 +41,15 @@ extension WeatherLocationViewController: WeatherLocationViewType {
     
     func hideTableView() {
         tableView.isHidden = true
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension WeatherLocationViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let mapHeaderView = tableView.tableHeaderView as? MapHeaderView else { return }
+        
+        mapHeaderView.scrollViewDidScroll(scrollView: scrollView)
     }
 }
 
@@ -66,6 +80,11 @@ extension WeatherLocationViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDataSource
+extension WeatherLocationViewController: UITableViewDelegate {
+    
+}
+
 // MARK: - Private methods
 private extension WeatherLocationViewController {
     func configureUI() {
@@ -76,21 +95,23 @@ private extension WeatherLocationViewController {
     
     func setupTableView() {
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(cellNibType: InformationTableViewCell.self)
         tableView.register(cellNibType: DescriptionTableViewCell.self)
+        tableView.tableHeaderView = mapHeaderView
     }
     
     func setupPin() {
         guard let presenter = presenter else { return }
-        
+
         let coordinate = CLLocationCoordinate2D(latitude: presenter.city.coord.lat,
                                                 longitude: presenter.city.coord.lon)
         let pin = MKPointAnnotation()
         pin.coordinate = coordinate
         pin.title = presenter.city.name
-        mapView.addAnnotation(pin)
+        mapHeaderView.mapView.addAnnotation(pin)
         let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
         let region = MKCoordinateRegion(center: coordinate, span: span)
-        mapView.setRegion(region, animated: true)
+        mapHeaderView.mapView.setRegion(region, animated: true)
     }
 }
