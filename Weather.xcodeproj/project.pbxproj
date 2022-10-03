@@ -342,10 +342,10 @@
 		1F50022528EAB6E700CCA8E3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1F7C445128EB66E50050C4FC /* Header */,
 				1F50025128EAE18700CCA8E3 /* Cells */,
 				1F50023F28EAB79000CCA8E3 /* WeatherLocationViewController.xib */,
 				1F50023B28EAB79000CCA8E3 /* WeatherLocationViewController.swift */,
-				1F7C444D28EB0E0F0050C4FC /* MapHeaderView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -417,6 +417,14 @@
 				1FD4FDA228EAE9E60077A29A /* Description */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		1F7C445128EB66E50050C4FC /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				1F7C444D28EB0E0F0050C4FC /* MapHeaderView.swift */,
+			);
+			path = Header;
 			sourceTree = "<group>";
 		};
 		1FD4FD9F28EAE9E60077A29A /* Information */ = {
